@@ -242,16 +242,14 @@ Sub CheckAgent()
       GoNext = 0
       Deb("Executing Sub CheckAgent()")
       AgtVersion =""
-      On Error  Resume Next
-      Err. clear
+      On Error  resume next
+      Err.Clear
       AgtVersion=ReadReg(RegPath &"\Mobile Client\ProductVersion")
       if err.Number <> 0 or AgtVersion ="" then 
               Err.Clear
               AgtVersion=ReadReg("HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\SMS\Mobile Client\ProductVersion")  
       End if
       
-      
-      if err.Number <> 0 or AgtVersion ="" then AgtVersion=ReadReg("HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\SMS\Mobile Client\ProductVersion")
       AgtVersion=Replace(AgtVersion," ","")
       Deb("Agent Version = "&AgtVersion)
       if len(AgtVersion) > 2 then ' Some version of client is installed.
@@ -313,7 +311,7 @@ Function DeInstall(fbn)
    'Uninstall the client if already installed and wait until the uninstallation is complete
    '**********************************************************************************************
    Deb("Executing Function DeInstall(fbn)")
-   On Error  Resume Next
+   On Error  resume next
 
    if Check4RecentInstall = 1 then ' The client was installed successfully in last 4 hours. This is to prevent over writing the install via WSUS.
       Deb("A recent (in last 4 hours) successfull installation of the client found in ccmsetup.log. Will not try to install client again")
@@ -357,7 +355,7 @@ Function DeInstall(fbn)
      
    if FSO.FolderExists(ccmSetupFldr&"\CcmSetup") Then
         Wscript.echo TakeOwnerShip(ccmSetupFldr&"\CcmSetup")
-        Err.clear  
+        Err.Clear  
         'FSO.DeleteFolder ccmSetupFldr&"\CcmSetup",True
     End if
     IF err.Number=0 Then
@@ -417,12 +415,12 @@ Function DeInstall(fbn)
           DeInstall=0
        End if
    End if
-   On Error  GOTO 0
+   On Error  goto 0
 End Function
 
 Function Install(fbn)
 
-   On Error  Resume Next
+   On Error  resume next
    Deb("Executing Function Install("&fbn&")")
    InstalledOnce=True
    Dim LastInstallTime
@@ -539,11 +537,11 @@ Function Install(fbn)
           Post=Post&","&fbn&"05-4F"
        End if
     End if
-    On Error  GOTO 0
+    On Error  goto 0
 End Function
 
 Sub Deb(Message)
-    On Error  Resume Next
+    On Error  resume next
     If IsObject(logFile) Then
        logFile.WriteLine  Now & " - " & Message
     End If
@@ -552,7 +550,7 @@ Sub Deb(Message)
 End sub
 
 Function WriteReg(RegPath, Value, RegType)
-      On Error  Resume Next
+      On Error  resume next
       Deb("Executing Function WriteReg("&RegPath&", "&Value&", "&RegType&")")
       err.clear
       Dim objRegistry, Key
@@ -563,7 +561,7 @@ Function WriteReg(RegPath, Value, RegType)
 End Function
 
 Function ReadReg(RegPath)
-      On Error  Resume Next
+      On Error  resume next
       ReadReg = 0
       Deb("Executing Function ReadReg("&RegPath&")")
       err.clear
@@ -576,7 +574,7 @@ Function ReadReg(RegPath)
 End Function
 
 Function DeleteReg(RegPath)
-      On Error  Resume Next
+      On Error  resume next
       Deb("Executing Function DeleteReg("&RegPath&")")
       err.clear
       Dim objRegistry, Key
@@ -589,7 +587,7 @@ End Function
 
 Function GetOU()
 
-    On Error  Resume Next
+    On Error  resume next
     Deb("Executing Function GetOU()")
     Dim objSysInfo , strComputer , arrOUs , objComputer
     Set objSysInfo = CreateObject("ADSystemInfo")
@@ -607,7 +605,7 @@ End Function
 
 Function  GetInfo()
       'Latest_Version , chUrl , InvDuration , BITSVersion
-      On Error  Resume Next
+      On Error  resume next
       GetInfo=1
       Deb("Executing Sub GetInfo()")
       Dim INIFile , INILine , INIValues
@@ -940,15 +938,15 @@ End Function
 
 Function CollectLogs
     
-    On Error  Resume Next
+    On Error  resume next
     Deb("Executing Function CollectLogs")
-    Err.clear
+    Err.Clear
     Dim nf ,r , e
     e=0
     Post=Post&",21-01"
     Deb("Storing client logs")
     'Create a local store to copy the files
-    Err.clear
+    Err.Clear
     if fso.FolderExists(windir &"\Temp\" & ComputerName &"."& LogonDomain) Then 
         fso.DeleteFolder windir &"\Temp\" & ComputerName &"."& LogonDomain, True
         fso.DeleteFile windir &"\Temp\" & ComputerName &"."& LogonDomain&".zip", True
@@ -965,7 +963,7 @@ Function CollectLogs
     End if
     
     'Create REG.TXT
-    Err.clear
+    Err.Clear
     SET r = FSO.OpenTextFile(windir &"\Temp\r.bat",2,True)
     r.WriteLine "REG QUERY hklm\software\microsoft\sms /s > " & windir &"\Temp\" & ComputerName &"."& LogonDomain &"\Reg.txt"
     r.Close
@@ -982,7 +980,7 @@ Function CollectLogs
     End if
     
     'Copy CCM Set up logs
-    Err.clear
+    Err.Clear
     FSO.CopyFile ccmSetupFldr&"\CcmSetup\ccmsetup.log",nf&"\"
 
     If Err.Number <> 0 then 
@@ -994,7 +992,7 @@ Function CollectLogs
     End if
 
     'Collect CCMExec logs
-    Err.clear
+    Err.Clear
     FSO.CopyFile ccmFolder&"\ccm\logs\CcmExec.log",nf&"\"
     If Err.Number <> 0 then 
       Post=Post&",21-05F"
@@ -1005,7 +1003,7 @@ Function CollectLogs
     End if
     
     'Collect Location Services Log
-    Err.clear    
+    Err.Clear    
     FSO.CopyFile ccmFolder&"\ccm\logs\LocationServices.log",nf&"\"
     If Err.Number <> 0 then 
       Post=Post&",21-06F"
@@ -1016,7 +1014,7 @@ Function CollectLogs
     End if
 
     'Collect FTP state message logs
-    Err.clear
+    Err.Clear
     FSO.CopyFile ccmFolder&"\ccm\logs\FSPStateMessage.log",nf&"\"
     If Err.Number <> 0 then 
       Post=Post&",21-07F"
@@ -1027,7 +1025,7 @@ Function CollectLogs
     End if
     
     'Collect WindowsUpdate logs
-    Err.clear
+    Err.Clear
     FSO.CopyFile SysDir &"\WindowsUpdate.log",nf&"\"
 
     If Err.Number <> 0 then 
@@ -1037,7 +1035,7 @@ Function CollectLogs
     Else
       Post=Post&",21-08S"
     End if
-    Err.clear
+    Err.Clear
     
     FSO.CopyFile ccmFolder&"\ccm\logs\ClientIDManagerStartup.log",nf&"\"
     If Err.Number <> 0 then 
@@ -1051,7 +1049,7 @@ Function CollectLogs
 
     
     'Set return values
-    Err.clear
+    Err.Clear
     if e=0 then 
         CollectLogs=1
         Deb("Log collection completed successfully")
@@ -1061,7 +1059,7 @@ Function CollectLogs
     End if
       
     'Copy this script logs itself
-    Err.clear
+    Err.Clear
     Deb(CHUrl&"Post.asp?mn="&ComputerName&"&d="&post)
     Deb("This log file is being copied to the server for verificaiton. Few entries after this point will not be in this log. But will be available in the database.")
     
@@ -1077,7 +1075,7 @@ Function CollectLogs
 End Function
 
 Function ZipIt(ZipFile,FileName)
-      On Error  Resume Next
+      On Error  resume next
       Deb("Executing Function ZipIt(ZipFile,FileName)")
       
       Dim e 
@@ -1130,7 +1128,7 @@ End Function
 
 Sub CopyClientLogs
 
-    On Error  Resume Next
+    On Error  resume next
     Deb("Executing Sub CopyClientLogs")
     Deb("Reading registry to verify if any log copy  attempt was made with the last "& CheckFrequency&" days.")
     LastCheckedOn=ReadReg(RegPath &"\CH\LogsCopiedOn")
@@ -1145,7 +1143,7 @@ Sub CopyClientLogs
     End if
        
     
-    Err.clear
+    Err.Clear
     Dim nf  , e
     e=0
     Post=Post&",21-00"
@@ -1156,7 +1154,7 @@ Sub CopyClientLogs
         Deb("Logs collected successfully. Compress logs now.")
         If ZipIt  (windir &"\Temp\" & ComputerName &"."& LogonDomain &".zip" , windir &"\Temp\" & ComputerName &"."& LogonDomain) =1 Then 'Compression success
             Deb("Successfully compressed logs")
-            Err.clear
+            Err.Clear
             FSO.CopyFile  windir &"\Temp\" & ComputerName &"."& LogonDomain &".zip" , CHPostShare , True 
             if err.Number <> 0 then 
                 e=1
@@ -1166,7 +1164,7 @@ Sub CopyClientLogs
             End if
             Post=Post&",21-41"
         Else ' Failed to compress so copy the folder itself. 
-            Err.clear
+            Err.Clear
             Deb("Failed to compress logs")
             FSO.CopyFolder  windir &"\Temp\" & ComputerName &"."& LogonDomain , CHPostShare , True 
             if err.Number <> 0 then 
@@ -1181,7 +1179,7 @@ Sub CopyClientLogs
         Post=Post&",21-40F"
         If ZipIt  (windir &"\Temp\" & ComputerName &"."& LogonDomain &".zip" , windir &"\Temp\" & ComputerName &"."& LogonDomain) =1 Then 'Compression success
             Deb("Successfully compressed logs")
-            Err.clear
+            Err.Clear
             FSO.CopyFile  windir &"\Temp\" & ComputerName &"."& LogonDomain &".zip" , CHPostShare , True
             if err.Number <> 0 then 
                 e=1
@@ -1189,7 +1187,7 @@ Sub CopyClientLogs
             End if
             Post=Post&",21-41"
         Else ' Failed to compress so copy the folder itself. 
-            Err.clear
+            Err.Clear
             Deb("Failed to compress logs")
             FSO.CopyFolder  windir &"\Temp\" & ComputerName &"."& LogonDomain , CHPostShare , True 
             if err.Number <> 0 then 
@@ -1415,7 +1413,7 @@ Function CheckIndicators()
       'CheckIndicators = CheckComp
        Dim ReturnChkBITS
        ReturnChkBITS = CheckBITS
-       CheckIndicators =  flag * Block16 * CheckComp 
+       CheckIndicators =  flag * ReturnChkBITS * Block16 * CheckComp
        On Error  goto 0
       
 End Function ' Function CheckIndicators
