@@ -242,16 +242,14 @@ Sub CheckAgent()
       GoNext = 0
       Deb("Executing Sub CheckAgent()")
       AgtVersion =""
-      On Error  Resume Next
-      Err. clear
+      On Error  resume next
+      Err.Clear
       AgtVersion=ReadReg(RegPath &"\Mobile Client\ProductVersion")
       if err.Number <> 0 or AgtVersion ="" then 
               Err.Clear
               AgtVersion=ReadReg("HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\SMS\Mobile Client\ProductVersion")  
       End if
       
-      
-      if err.Number <> 0 or AgtVersion ="" then AgtVersion=ReadReg("HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\SMS\Mobile Client\ProductVersion")
       AgtVersion=Replace(AgtVersion," ","")
       Deb("Agent Version = "&AgtVersion)
       if len(AgtVersion) > 2 then ' Some version of client is installed.
@@ -313,7 +311,7 @@ Function DeInstall(fbn)
    'Uninstall the client if already installed and wait until the uninstallation is complete
    '**********************************************************************************************
    Deb("Executing Function DeInstall(fbn)")
-   On Error  Resume Next
+   On Error  resume next
 
    if Check4RecentInstall = 1 then ' The client was installed successfully in last 4 hours. This is to prevent over writing the install via WSUS.
       Deb("A recent (in last 4 hours) successfull installation of the client found in ccmsetup.log. Will not try to install client again")
@@ -357,14 +355,14 @@ Function DeInstall(fbn)
      
    if FSO.FolderExists(ccmSetupFldr&"\CcmSetup") Then
         Wscript.echo TakeOwnerShip(ccmSetupFldr&"\CcmSetup")
-        Err.clear  
+        Err.Clear  
         'FSO.DeleteFolder ccmSetupFldr&"\CcmSetup",True
     End if
     IF err.Number=0 Then
       Deb("CCMSetup Folder deleted Successfully or did not exist.")
       Post=Post&","&fbn&"04-1S"
     Else
-      Deb("Couldnot Delete CCMSetup Folder. Error Was " &Err.Description)
+      Deb("Could not Delete CCMSetup Folder. Error Was " &Err.Description)
       Post=Post&","&fbn&"04-1F"
     End if
 
@@ -395,7 +393,7 @@ Function DeInstall(fbn)
            '  Deb("CCM Folder deleted Successfully or did not exist.")
           'Else
            '  Post=Post&","&fbn&"04-3F"
-           '  Deb("Couldnot Delete CCM Folder. Error Was " &Err.Description)
+           '  Deb("Could not Delete CCM Folder. Error Was " &Err.Description)
           'End if
           
           Deb("Removing SMS Registry")
@@ -408,7 +406,7 @@ Function DeInstall(fbn)
              Deb("SMS registry deleted Successfully or did not exist.")
           Else
              Post=Post&","&fbn&"04-4F"
-             Deb("Couldnot Delete SMS Registry Key, error Was " &Err.Description)
+             Deb("Could not Delete SMS Registry Key, error Was " &Err.Description)
           End if
         
           DeInstall=1
@@ -417,12 +415,12 @@ Function DeInstall(fbn)
           DeInstall=0
        End if
    End if
-   On Error  GOTO 0
+   On Error  goto 0
 End Function
 
 Function Install(fbn)
 
-   On Error  Resume Next
+   On Error  resume next
    Deb("Executing Function Install("&fbn&")")
    InstalledOnce=True
    Dim LastInstallTime
@@ -463,7 +461,7 @@ Function Install(fbn)
             Deb("CCMSetup Folder deleted Successfully or did not exist.")
             Post=Post&","&fbn&"05-1S"
          Else
-            Deb("Couldnot Delete CCMSetup Folder '" & ccmSetupFldr&"\CcmSetup' Error Was " & Err.Description)
+            Deb("Could not Delete CCMSetup Folder '" & ccmSetupFldr&"\CcmSetup' Error Was " & Err.Description)
             Post=Post&","&fbn&"05-1F"
             err.clear
          End if        
@@ -483,7 +481,7 @@ Function Install(fbn)
         Deb("CCM Folder deleted Successfully or did not exist.")
     Else
         Post=Post&","&fbn&"05-2F"
-        'Deb("Couldnot Delete CCM Folder. Error Was " &Err.Description)
+        'Deb("Could not Delete CCM Folder. Error Was " &Err.Description)
     End if
              
    'Add the server name in to the trusted site. This is to avoid prompting for user input.
@@ -539,11 +537,11 @@ Function Install(fbn)
           Post=Post&","&fbn&"05-4F"
        End if
     End if
-    On Error  GOTO 0
+    On Error  goto 0
 End Function
 
 Sub Deb(Message)
-    On Error  Resume Next
+    On Error  resume next
     If IsObject(logFile) Then
        logFile.WriteLine  Now & " - " & Message
     End If
@@ -552,7 +550,7 @@ Sub Deb(Message)
 End sub
 
 Function WriteReg(RegPath, Value, RegType)
-      On Error  Resume Next
+      On Error  resume next
       Deb("Executing Function WriteReg("&RegPath&", "&Value&", "&RegType&")")
       err.clear
       Dim objRegistry, Key
@@ -563,7 +561,7 @@ Function WriteReg(RegPath, Value, RegType)
 End Function
 
 Function ReadReg(RegPath)
-      On Error  Resume Next
+      On Error  resume next
       ReadReg = 0
       Deb("Executing Function ReadReg("&RegPath&")")
       err.clear
@@ -576,7 +574,7 @@ Function ReadReg(RegPath)
 End Function
 
 Function DeleteReg(RegPath)
-      On Error  Resume Next
+      On Error  resume next
       Deb("Executing Function DeleteReg("&RegPath&")")
       err.clear
       Dim objRegistry, Key
@@ -589,7 +587,7 @@ End Function
 
 Function GetOU()
 
-    On Error  Resume Next
+    On Error  resume next
     Deb("Executing Function GetOU()")
     Dim objSysInfo , strComputer , arrOUs , objComputer
     Set objSysInfo = CreateObject("ADSystemInfo")
@@ -607,7 +605,7 @@ End Function
 
 Function  GetInfo()
       'Latest_Version , chUrl , InvDuration , BITSVersion
-      On Error  Resume Next
+      On Error  resume next
       GetInfo=1
       Deb("Executing Sub GetInfo()")
       Dim INIFile , INILine , INIValues
@@ -940,15 +938,15 @@ End Function
 
 Function CollectLogs
     
-    On Error  Resume Next
+    On Error  resume next
     Deb("Executing Function CollectLogs")
-    Err.clear
+    Err.Clear
     Dim nf ,r , e
     e=0
     Post=Post&",21-01"
     Deb("Storing client logs")
     'Create a local store to copy the files
-    Err.clear
+    Err.Clear
     if fso.FolderExists(windir &"\Temp\" & ComputerName &"."& LogonDomain) Then 
         fso.DeleteFolder windir &"\Temp\" & ComputerName &"."& LogonDomain, True
         fso.DeleteFile windir &"\Temp\" & ComputerName &"."& LogonDomain&".zip", True
@@ -958,14 +956,14 @@ Function CollectLogs
     Deb("File store folder is "&nf)
     If Err.Number <> 0 then 
       Post=Post&",21-02F"
-      Deb("Failed to create folder for file store. An error "&Err.Number&" occured. Description "&Err.Description)
+      Deb("Failed to create folder for file store. An error "&Err.Number&" occurred. Description "&Err.Description)
       e=1
     Else
       Post=Post&",21-02S"
     End if
     
     'Create REG.TXT
-    Err.clear
+    Err.Clear
     SET r = FSO.OpenTextFile(windir &"\Temp\r.bat",2,True)
     r.WriteLine "REG QUERY hklm\software\microsoft\sms /s > " & windir &"\Temp\" & ComputerName &"."& LogonDomain &"\Reg.txt"
     r.Close
@@ -975,74 +973,74 @@ Function CollectLogs
     
     If Err.Number <> 0 then 
       Post=Post&",21-03F"
-      Deb("Failed to collect registry details.An error "&Err.Number&" occured. Description "&Err.Description)
+      Deb("Failed to collect registry details.An error "&Err.Number&" occurred. Description "&Err.Description)
       e=1
     Else
       Post=Post&",21-03S"
     End if
     
     'Copy CCM Set up logs
-    Err.clear
+    Err.Clear
     FSO.CopyFile ccmSetupFldr&"\CcmSetup\ccmsetup.log",nf&"\"
 
     If Err.Number <> 0 then 
       Post=Post&",21-04F"
-      Deb("Failed to collecte ccmsetup.log. An error "&Err.Number&" occured. Description "&Err.Description)
+      Deb("Failed to collect ccmsetup.log. An error "&Err.Number&" occurred. Description "&Err.Description)
       e=1
     Else
       Post=Post&",21-04S"
     End if
 
     'Collect CCMExec logs
-    Err.clear
+    Err.Clear
     FSO.CopyFile ccmFolder&"\ccm\logs\CcmExec.log",nf&"\"
     If Err.Number <> 0 then 
       Post=Post&",21-05F"
-      Deb("Failed to collect ccmExec.log. An error "&Err.Number&" occured. Description "&Err.Description)
+      Deb("Failed to collect ccmExec.log. An error "&Err.Number&" occurred. Description "&Err.Description)
       e=1
     Else
       Post=Post&",21-05S"
     End if
     
     'Collect Location Services Log
-    Err.clear    
+    Err.Clear    
     FSO.CopyFile ccmFolder&"\ccm\logs\LocationServices.log",nf&"\"
     If Err.Number <> 0 then 
       Post=Post&",21-06F"
-      Deb("Failed to collect LocationService.log. An error "&Err.Number&" occured. Description "&Err.Description)
+      Deb("Failed to collect LocationService.log. An error "&Err.Number&" occurred. Description "&Err.Description)
       e=1
     Else
       Post=Post&",21-06S"
     End if
 
     'Collect FTP state message logs
-    Err.clear
+    Err.Clear
     FSO.CopyFile ccmFolder&"\ccm\logs\FSPStateMessage.log",nf&"\"
     If Err.Number <> 0 then 
       Post=Post&",21-07F"
-      Deb("Failed to collect FSPStateMessage.log. An error "&Err.Number&" occured. Description "&Err.Description)
+      Deb("Failed to collect FSPStateMessage.log. An error "&Err.Number&" occurred. Description "&Err.Description)
       e=1
     Else
       Post=Post&",21-07S"
     End if
     
     'Collect WindowsUpdate logs
-    Err.clear
+    Err.Clear
     FSO.CopyFile SysDir &"\WindowsUpdate.log",nf&"\"
 
     If Err.Number <> 0 then 
       Post=Post&",21-08F"
-      Deb("Failed to collect WindowsUpdate.log. An error "&Err.Number&" occured. Description "&Err.Description)
+      Deb("Failed to collect WindowsUpdate.log. An error "&Err.Number&" occurred. Description "&Err.Description)
       e=1
     Else
       Post=Post&",21-08S"
     End if
-    Err.clear
+    Err.Clear
     
     FSO.CopyFile ccmFolder&"\ccm\logs\ClientIDManagerStartup.log",nf&"\"
     If Err.Number <> 0 then 
       'Post=Post&",21-07F"
-      Deb("Failed to collect ClientIDManagerStartup.log. An error "&Err.Number&" occured. Description "&Err.Description)
+      Deb("Failed to collect ClientIDManagerStartup.log. An error "&Err.Number&" occurred. Description "&Err.Description)
       e=1
     Else
       'Post=Post&",21-07S"
@@ -1051,7 +1049,7 @@ Function CollectLogs
 
     
     'Set return values
-    Err.clear
+    Err.Clear
     if e=0 then 
         CollectLogs=1
         Deb("Log collection completed successfully")
@@ -1061,7 +1059,7 @@ Function CollectLogs
     End if
       
     'Copy this script logs itself
-    Err.clear
+    Err.Clear
     Deb(CHUrl&"Post.asp?mn="&ComputerName&"&d="&post)
     Deb("This log file is being copied to the server for verificaiton. Few entries after this point will not be in this log. But will be available in the database.")
     
@@ -1077,7 +1075,7 @@ Function CollectLogs
 End Function
 
 Function ZipIt(ZipFile,FileName)
-      On Error  Resume Next
+      On Error  resume next
       Deb("Executing Function ZipIt(ZipFile,FileName)")
       
       Dim e 
@@ -1130,7 +1128,7 @@ End Function
 
 Sub CopyClientLogs
 
-    On Error  Resume Next
+    On Error  resume next
     Deb("Executing Sub CopyClientLogs")
     Deb("Reading registry to verify if any log copy  attempt was made with the last "& CheckFrequency&" days.")
     LastCheckedOn=ReadReg(RegPath &"\CH\LogsCopiedOn")
@@ -1145,7 +1143,7 @@ Sub CopyClientLogs
     End if
        
     
-    Err.clear
+    Err.Clear
     Dim nf  , e
     e=0
     Post=Post&",21-00"
@@ -1153,10 +1151,10 @@ Sub CopyClientLogs
     'Check if the last copy file copy was done within the pre determined time and do not copy .
      IF CollectLogs = 1 Then ' Log collection success. Now try to zip it and copy to the server
         Post=Post&",21-40S"
-        Deb("Logs collected successfully. Compress logs now.")
+        Deb("Logs collectd successfully. Compress logs now.")
         If ZipIt  (windir &"\Temp\" & ComputerName &"."& LogonDomain &".zip" , windir &"\Temp\" & ComputerName &"."& LogonDomain) =1 Then 'Compression success
             Deb("Successfully compressed logs")
-            Err.clear
+            Err.Clear
             FSO.CopyFile  windir &"\Temp\" & ComputerName &"."& LogonDomain &".zip" , CHPostShare , True 
             if err.Number <> 0 then 
                 e=1
@@ -1166,7 +1164,7 @@ Sub CopyClientLogs
             End if
             Post=Post&",21-41"
         Else ' Failed to compress so copy the folder itself. 
-            Err.clear
+            Err.Clear
             Deb("Failed to compress logs")
             FSO.CopyFolder  windir &"\Temp\" & ComputerName &"."& LogonDomain , CHPostShare , True 
             if err.Number <> 0 then 
@@ -1181,7 +1179,7 @@ Sub CopyClientLogs
         Post=Post&",21-40F"
         If ZipIt  (windir &"\Temp\" & ComputerName &"."& LogonDomain &".zip" , windir &"\Temp\" & ComputerName &"."& LogonDomain) =1 Then 'Compression success
             Deb("Successfully compressed logs")
-            Err.clear
+            Err.Clear
             FSO.CopyFile  windir &"\Temp\" & ComputerName &"."& LogonDomain &".zip" , CHPostShare , True
             if err.Number <> 0 then 
                 e=1
@@ -1189,7 +1187,7 @@ Sub CopyClientLogs
             End if
             Post=Post&",21-41"
         Else ' Failed to compress so copy the folder itself. 
-            Err.clear
+            Err.Clear
             Deb("Failed to compress logs")
             FSO.CopyFolder  windir &"\Temp\" & ComputerName &"."& LogonDomain , CHPostShare , True 
             if err.Number <> 0 then 
@@ -1225,7 +1223,7 @@ Function CheckIndicators()
 
       Set objWMIService = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\ccm\invagt")
       if Err.Number <> 0 then
-          Deb("An error "&err.number&",   '"&err.description&"' occured while connecting to \root\ccm\invagt.......")
+          Deb("An error "&err.number&",   '"&err.description&"' occurred while connecting to \root\ccm\invagt.......")
           Post=Post&",10-00F"
           flag = 0
       Else
@@ -1234,7 +1232,7 @@ Function CheckIndicators()
           Deb("Connection to invAgt success")
           Set colServiceList = objWMIService.ExecQuery ("Select * from InventoryActionStatus")
           if Err.Number <> 0 then
-              Deb("An error "&err.number&",   '"&err.description&"' occured while reading InventoryActionStatus.......")
+              Deb("An error "&err.number&",   '"&err.description&"' occurred while reading InventoryActionStatus.......")
               Post=Post&",10-01F"
               flag =0
               Err.Clear
@@ -1272,7 +1270,7 @@ Function CheckIndicators()
                             if HWinvOn<dateAdd("d",-1*InvDuration,now) Then ' HW inv was not done in last "InvDuration" days
                                 Deb("LastCycleStartedDate = "& objService.LastCycleStartedDate&", LastReportDate = "& objService.LastReportDate & "Triggering HW inv ......")
                                 'Trigger it
-                                if Tirgerit("Hardware Inventory",objService.InventoryActionID) = 0  then 
+                                if Triggerit("Hardware Inventory",objService.InventoryActionID) = 0  then 
                                     flag =0
                                     Post=Post&",11-01F"
                                     agtConfig =agtConfig &"HW=F,"
@@ -1312,7 +1310,7 @@ Function CheckIndicators()
                             if SWinvOn<dateAdd("d",-1*InvDuration,now) then ' SW inv was not done in last "InvDuration" days
                                 Deb("LastCycleStartedDate = "& objService.LastCycleStartedDate&", LastReportDate = "& objService.LastReportDate & "Triggering SW inv ......")
                                 'Trigger it  Software Inventory Collection
-                                if Tirgerit("Software Inventory",objService.InventoryActionID) = 0 Then
+                                if Triggerit("Software Inventory",objService.InventoryActionID) = 0 Then
                                     flag =0
                                     Post=Post&",11-02F"
                                     agtConfig =agtConfig &"SW=F,"
@@ -1351,7 +1349,7 @@ Function CheckIndicators()
                             if DiscoveryOn<dateAdd("d",-1*InvDuration,now) Then ' Discovery was not done in last "InvDuration" days
                                 Deb("LastCycleStartedDate = "& objService.LastCycleStartedDate&", LastReportDate = "& objService.LastReportDate & "Triggering Discovery ......")
                                 'Trigger it Discovery Data Collection
-                                if Tirgerit("Discovery Data Collection",objService.InventoryActionID) = 0  then 
+                                if Triggerit("Discovery Data Collection",objService.InventoryActionID) = 0  then 
                                      flag =0
                                      Post=Post&",11-03F"
                                      agtConfig =agtConfig &"DISC=F,"
@@ -1373,7 +1371,7 @@ Function CheckIndicators()
 
               IF HWinvOn="" then 'No instance of this was found 
                   Deb("Forcing Hardware Inventory Collection. It appears that Hardware inventory is disabled or an instance of this component doesnot exist in WMI. One of the reasons for this is, the client is NOT registered yet")
-                  if  Tirgerit("Hardware Inventory Collection","{00000000-0000-0000-0000-000000000001}") = 0 Then ' failed to trigger them
+                  if  Triggerit("Hardware Inventory Collection","{00000000-0000-0000-0000-000000000001}") = 0 Then ' failed to trigger them
                       flag =0
                       Post=Post&",11-01F"
                       agtConfig =agtConfig &"HW=F," 
@@ -1383,7 +1381,7 @@ Function CheckIndicators()
               
               if SWinvOn="" Then
                    Deb(" Forcing software Inventory Collection. It appears that Software inventory is disabled or an instance of this component doesnot exist in WMI. One of the reasons for this is, the client is NOT registered yet")
-                   if Tirgerit("Software Inventory Collection","{00000000-0000-0000-0000-000000000002}") = 0 Then ' No instance of this was found and failed to trigger them
+                   if Triggerit("Software Inventory Collection","{00000000-0000-0000-0000-000000000002}") = 0 Then ' No instance of this was found and failed to trigger them
                        flag = 0
                        Post=Post&",11-02F"
                        agtConfig =agtConfig &"SW=F,"
@@ -1393,7 +1391,7 @@ Function CheckIndicators()
               
               if DiscoveryOn="" Then
                  Deb("Forcing Discovery. It appears that Discovery is disabled or an instance of this component doesnot exist in WMI.  One of the reasons for this is, the client is NOT registered yet")
-                 IF Tirgerit("Discovery Data Collection","{00000000-0000-0000-0000-000000000003}") = 0 Then ' No instance of this was found and failed to trigger them
+                 IF Triggerit("Discovery Data Collection","{00000000-0000-0000-0000-000000000003}") = 0 Then ' No instance of this was found and failed to trigger them
                      flag = 0
                      Post=Post&",11-03F"
                      agtConfig =agtConfig &"DISC=F,"  
@@ -1404,7 +1402,7 @@ Function CheckIndicators()
               '***********************
               'Trigger machine policy
               '***********************
-              if Tirgerit("Request & Evaluate Machine","{3A88A2F3-0C39-45fa-8959-81F21BF500CE}")  = 1 then 
+              if Triggerit("Request & Evaluate Machine","{3A88A2F3-0C39-45fa-8959-81F21BF500CE}")  = 1 then 
                     Deb("Triggered Machine policy")
               End if
           End if
@@ -1415,7 +1413,7 @@ Function CheckIndicators()
       'CheckIndicators = CheckComp
        Dim ReturnChkBITS
        ReturnChkBITS = CheckBITS
-       CheckIndicators =  flag * Block16 * CheckComp 
+       CheckIndicators =  flag * ReturnChkBITS * Block16() * CheckComp()
        On Error  goto 0
       
 End Function ' Function CheckIndicators
@@ -1543,9 +1541,9 @@ Sub EnableComp(comp) ' Will be done in next version....
 End Sub
 
 
-Function Tirgerit(AgtName,ActID)
-     Tirgerit =0
-     Deb("Executing Function Tirgerit("&AgtName&","&ActID&")")
+Function Triggerit(AgtName,ActID)
+     Triggerit =0
+     Deb("Executing Function Triggerit("&AgtName&","&ActID&")")
      On Error  resume next
       Dim o , oService , oList , oLists , SMSClient , ActionDate
       Set oService = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\ccm\invagt")
@@ -1566,7 +1564,7 @@ Function Tirgerit(AgtName,ActID)
                     if ActionDate<dateAdd("d",-7,date) Then 'inv was not done in last 7 days
                        SMSClient.TriggerSchedule ActID
                        Deb("Triggered "&AgtName)
-                       Tirgerit =1
+                       Triggerit =1
                     Else
                        Deb("Failed to trigger "&AgtName)
                     End if
